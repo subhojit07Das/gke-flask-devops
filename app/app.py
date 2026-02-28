@@ -12,7 +12,11 @@ def home():
 
 @app.route("/health")
 def health():
-    return jsonify(status="OK"), 200
+    return jsonify(
+        status="OK",
+        service="gke-flask",
+        environment="dev"
+    ), 200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
