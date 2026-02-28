@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gke-flask
+  labels:
+    app: gke-flask
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gke-flask
+  template:
+    metadata:
+      labels:
+        app: gke-flask
+    spec:
+      containers:
+      - name: gke-flask
+        image: asia-south1-docker.pkg.dev/valiant-marker-485408-f4/gke-flask-repo/gke-flask:1.1
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
